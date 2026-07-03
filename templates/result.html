@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .image-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .image-box {
+            text-align: center;
+        }
+
+        img {
+            border: 2px solid #444;
+            border-radius: 8px;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            width: fit-content;
+            border-radius: 8px;
+        }
+
+        /*  Recommendation  */
+        .recommendation-list {
+            max-width: 600px;
+            margin-top: 10px;
+            padding-left: 40px;   
+            text-align: left;
+        }
+
+        .recommendation-list li {
+            margin-bottom: 8px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Eye Disease Detection Result</h2>
+
+    <!-- Result Summary -->
+     
+<div class="result-box">
+    <h3>
+        Predicted Disease:
+        <span class="{% if result == 'Normal' %}disease-normal{% else %}disease-abnormal{% endif %}">
+    {{ result }}
+</span>
+    </h3>
+
+    {% if confidence %}
+
+    <h4>Confidence: {{ confidence }}%</h4>
+
+    <!-- ✅ SEVERITY -->
+    <h4>
+        Severity:
+        <span style="color:orange">
+            {% if result == "Normal" %}
+                None
+            {% elif confidence >= 95 %}
+                Severe
+            {% elif confidence >= 75 %}
+                Moderate
+            {% else %}
+                Mild
+            {% endif %}
+        </span>
+    </h4>
+
+    <!-- ✅ RISK LEVEL WITH COLOR -->
+    <h4>
+    Risk Level:
+    <span class="
+        {% if result == 'Normal' %}
+            risk-low
+        {% elif confidence >= 90 %}
+            risk-high
+        {% elif confidence >= 70 %}
+            risk-medium
+        {% else %}
+            risk-low
+        {% endif %}
+    ">
+        {% if result == "Normal" %}
+            Low
+        {% elif confidence >= 90 %}
+            High ⚠
+        {% elif confidence >= 70 %}
+            Medium
+        {% else %}
+            Low
+        {% endif %}
+    </span>
+</h4>
+
+
+{% if confidence >= 90 and result != "Normal" %}
+<div style="
+    background: linear-gradient(90deg, #ff4d4d, #cc0000);
+    color: white;
+    padding:12px;
+    border-radius:10px;
+    margin-top:10px;
+    font-weight:bold;
+    text-align:center;
+    box-shadow: 0 0 15px rgba(255,0,0,0.5);
+">
+    ⚠ High Risk Detected – Immediate Medical Attention Required
+</div>
+{% endif %}
+    {% endif %}
+</div>
+
+    <!-- Images Section -->
+    <div class="image-container">
+
+        <!-- Original Image -->
+        <div class="image-box">
+            <h3>Original Image</h3>
+            <img src="/{{ img_path }}" width="300">
+        </div>
+
+        <!-- Grad-CAM Image -->
+        {% if gradcam_path %}
+        <div class="image-box">
+            <h3>Grad-CAM Visualization</h3>
+            <img src="/{{ gradcam_path }}" width="300">
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!--  Recommendations -->
+    <h3 style="margin-top:30px;">Recommended Actions</h3>
+
+<ul class="recommendation-list">
+    {% for rec in recommendations %}
+        <li>{{ rec }}</li>
+    {% endfor %}
+</ul>
+
+
+<div class="result-box">
+    <h3 style="color: black;">AI Insight</h3>
+    <p>
+        The model focused on critical retinal regions to predict 
+        <b>{{ result }}</b> with high confidence. 
+        This helps in early-stage disease identification.
+    </p>
+</div>
+
+    <a href="{{ url_for('view_report',
+    filename=img_path.split('/')[-1],
+    cataract=prob_dict['Cataract'],
+    dr=prob_dict['Diabetic Retinopathy'],
+    glaucoma=prob_dict['Glaucoma'],
+    normal=prob_dict['Normal']
+) }}" 
+style="background:#28a745; color:white; padding:8px 15px; border-radius:6px; text-decoration:none;"class="btn-green">
+    📊 View Explanation
+</a>
+
+    <!-- Download PDF -->
+{% if report_path %}
+    <a href="{{ url_for('download_report', filename=report_path) }}" target="_blank"
+style="background:#007bff; color:white; padding:8px 15px; border-radius:6px; text-decoration:none;"class="btn-blue">
+    📄 Download PDF Report
+</a>
+{% endif %}
+
+    <br><br>
+    <a href="/" style="background:red;color: white; padding:8px 15px; border-radius:6px; text-decoration:none;font-weight: bold;" class="btn-red">🔄 Try Another Image</a>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Eye Disease Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Centered Title at the Top -->
+    <div class="header">Eye Disease Detection</div>
+
+    {% if error %}
+<div style="
+    background:#ffe6e6;
+    color:#cc0000;
+    padding:12px;
+    margin:20px auto;
+    width:450px;
+    border-radius:8px;
+    text-align:center;
+    font-weight:bold;
+    border:1px solid #ff4d4d;
+">
+    {{ error }}
+</div>
+{% endif %}
+
+    <!-- Flash messages (used by the new retinal image validation layer) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div style="
+                    background:#ffe6e6;
+                    color:#cc0000;
+                    padding:12px;
+                    margin:20px auto;
+                    width:450px;
+                    border-radius:8px;
+                    text-align:center;
+                    font-weight:bold;
+                    border:1px solid #ff4d4d;
+                ">
+                    ❌ {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <div class="file-upload">
+            <label for="file">Choose Image</label>
+            <input type="file" name="file" id="file" required onchange="displayFileName()">
+            <span id="file-name">No file chosen</span>
+        </div>
+        <button type="submit">Upload & Predict</button>
+    </form>
+
+    <script>
+        function displayFileName() {
+            var fileInput = document.getElementById('file');
+            var fileName = document.getElementById('file-name');
+            if (fileInput.files.length > 0) {
+                fileName.textContent = fileInput.files[0].name;
+            } else {
+                fileName.textContent = "No file chosen";
+            }
+        }
+    </script>
+</body>
+</html>
