@@ -1,0 +1,229 @@
+/* General Styles */
+body {
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: auto;
+    padding: 20px;
+}
+
+/* Background Image with Blur */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://images.pexels.com/photos/801867/pexels-photo-801867.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940') no-repeat center center/cover;
+    filter: blur(8px) brightness(50%);
+    z-index: -1;
+}
+
+/* Title Styling - Centered at the Top */
+.header {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 36px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
+    animation: fadeInSmooth 1.2s ease-in-out;
+}
+
+/* Smooth Fade-in Animation */
+@keyframes fadeInSmooth {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -15px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+/* Form Styling */
+form {
+    background: rgba(255, 255, 255, 0.18);
+    padding: 25px;
+    border-radius: 14px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+    width: 90%;
+    max-width: 420px;
+    margin-top: 100px; /* Ensures spacing below the title */
+}
+
+form:hover {
+    transform: scale(1.05);
+}
+
+/* Custom File Upload */
+.file-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    margin: 15px;
+}
+
+/* Hide Default Input */
+.file-upload input[type="file"] {
+    display: none;
+}
+
+/* Custom Upload Button */
+.file-upload label {
+    background: linear-gradient(135deg, #ff6f61, #d43f00);
+    color: white;
+    padding: 14px 22px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+    display: inline-block;
+    font-weight: bold;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.file-upload label:hover {
+    background: linear-gradient(135deg, #e64a41, #a83200);
+    transform: scale(1.1);
+}
+
+/* Display Uploaded File Name */
+#file-name {
+    font-size: 16px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 14px;
+    border-radius: 6px;
+    max-width: 80%;
+    word-wrap: break-word;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Upload & Predict Button */
+button {
+    background: linear-gradient(135deg, #0072ff, #00c6ff);
+    color: white;
+    border: none;
+    padding: 14px 22px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+    font-weight: bold;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+button:hover {
+    background: linear-gradient(135deg, #0057e1, #009fdd);
+    transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header {
+        font-size: 28px;
+        padding: 12px 20px;
+    }
+
+    form {
+        width: 95%;
+    }
+
+    .file-upload label, button {
+        font-size: 16px;
+        padding: 12px 18px;
+    }
+}
+/* Risk Level Colors */
+.risk-high {
+    color: red;
+    font-weight: bold;
+}
+
+.risk-medium {
+    color: orange;
+    font-weight: bold;
+}
+
+.risk-low {
+    color: #00ff88;
+    font-weight: bold;
+}
+/* Disease color logic */
+.disease-normal {
+    color: #00ff88;   /* green */
+    font-weight: bold;
+}
+
+.disease-abnormal {
+    color: red;       /* red */
+    font-weight: bold;
+}
+.btn-green {
+    background: #28a745;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.btn-green:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px #28a745;
+}
+.btn-blue {
+    background: blue;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.btn-blue:hover {
+    background: blue;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px #2878a7fe;
+}
+.btn-red {
+    background: red;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.btn-red:hover {
+    background: red;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px #dc3545;
+}
+.back-btn:hover {
+    background: blue;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px #2878a7fe;
+}
