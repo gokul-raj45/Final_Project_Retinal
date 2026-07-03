@@ -40,7 +40,6 @@ app.secret_key = "replace-this-with-a-secure-random-value"
 os.makedirs("models", exist_ok=True)
 
 RESNET_PATH = "models/eye_disease_resnet.h5"
-DENSENET_PATH = "models/eye_disease_densenet.h5"
 
 if not os.path.exists(RESNET_PATH):
     logging.info("Downloading ResNet model...")
@@ -49,18 +48,11 @@ if not os.path.exists(RESNET_PATH):
         RESNET_PATH
     )
 
-if not os.path.exists(DENSENET_PATH):
-    logging.info("Downloading DenseNet model...")
-    urllib.request.urlretrieve(
-        "https://huggingface.co/gokulraj-45/eye-disease-model/resolve/main/eye_disease_densenet.h5",
-        DENSENET_PATH
-    )
+
 
 logging.info("Loading ResNet model...")
 resnet_model = load_model(RESNET_PATH)
 
-logging.info("Loading DenseNet model...")
-densenet_model = load_model(DENSENET_PATH)
 
 logging.info("Hybrid models loaded successfully!")
 
@@ -127,9 +119,7 @@ def get_recommendations(disease, confidence):
 # ---------------- Hybrid Prediction ----------------
 def hybrid_predict(img_array):
     pred_resnet = resnet_model.predict(img_array, verbose=0)
-    pred_densenet = densenet_model.predict(img_array, verbose=0)
-
-    final_pred = (pred_resnet + pred_densenet) / 2
+    final_pred = pred_resnet
 
     class_index = np.argmax(final_pred)
     confidence = float(np.max(final_pred))
