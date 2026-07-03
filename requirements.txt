@@ -7,3 +7,4 @@ scikit-learn
 Pillow
 opencv-python
 reportlab
+gunicorn
