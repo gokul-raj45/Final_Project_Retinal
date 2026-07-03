@@ -8,6 +8,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+
+import urllib.request
+
 from flask import Flask, render_template, request, send_file ,redirect, url_for, flash
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
@@ -18,6 +21,8 @@ from reportlab.lib import colors
 from datetime import datetime
 
 from PIL import Image
+
+
 
 # NEW: image validation layer (classical CV heuristics, no new model)
 from validation import is_retinal_fundus_image
@@ -32,8 +37,24 @@ app.secret_key = "replace-this-with-a-secure-random-value"
 
 
 # ---------------- Load Hybrid Models ----------------
-RESNET_PATH = r'C:\project\Eye-Disease-Detection\models\eye_disease_resnet.h5'
-DENSENET_PATH = r'C:\project\Eye-Disease-Detection\models\eye_disease_densenet.h5'
+os.makedirs("models", exist_ok=True)
+
+RESNET_PATH = "models/eye_disease_resnet.h5"
+DENSENET_PATH = "models/eye_disease_densenet.h5"
+
+if not os.path.exists(RESNET_PATH):
+    logging.info("Downloading ResNet model...")
+    urllib.request.urlretrieve(
+        "https://huggingface.co/gokulraj-45/eye-disease-model/resolve/main/eye_disease_resnet.h5",
+        RESNET_PATH
+    )
+
+if not os.path.exists(DENSENET_PATH):
+    logging.info("Downloading DenseNet model...")
+    urllib.request.urlretrieve(
+        "https://huggingface.co/gokulraj-45/eye-disease-model/resolve/main/eye_disease_densenet.h5",
+        DENSENET_PATH
+    )
 
 logging.info("Loading ResNet model...")
 resnet_model = load_model(RESNET_PATH)
@@ -41,7 +62,7 @@ resnet_model = load_model(RESNET_PATH)
 logging.info("Loading DenseNet model...")
 densenet_model = load_model(DENSENET_PATH)
 
-logging.info("✅ Hybrid models loaded successfully!")
+logging.info("Hybrid models loaded successfully!")
 
 # ---------------- Config ----------------
 CATEGORIES = ["Cataract", "Diabetic Retinopathy", "Glaucoma", "Normal"]
