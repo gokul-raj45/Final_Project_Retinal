@@ -4,6 +4,8 @@ import numpy as np
 import tensorflow as tf
 import cv2
 
+import gc
+
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -118,6 +120,8 @@ def get_recommendations(disease, confidence):
 
 # ---------------- Hybrid Prediction ----------------
 def hybrid_predict(img_array):
+    tf.keras.backend.clear_session()
+    gc.collect()
     pred_resnet = resnet_model.predict(img_array, verbose=0)
     final_pred = pred_resnet
 
