@@ -276,39 +276,37 @@ def index():
 
             result, confidence, prob_dict = hybrid_predict(img_array)
 
-            gradcam_path = generate_gradcam(
-                img_array,
-                resnet_model,
-                "block5_conv4",
-                filepath
-            )
+           # gradcam_path = generate_gradcam(
+            #    img_array,
+             #   resnet_model,
+              #  "block5_conv4",
+               # filepath
+            #)
 
-            chart_path = os.path.join(app.config["REPORT_FOLDER"], "prob_chart.png")
-            generate_probability_chart(prob_dict, chart_path)
+            #chart_path = os.path.join(app.config["REPORT_FOLDER"], "prob_chart.png")
+            #generate_probability_chart(prob_dict, chart_path)
 
-            report_path = os.path.join(
-                app.config["REPORT_FOLDER"],
-                f"{os.path.splitext(file.filename)[0]}_report.pdf"
-            )
+            #report_path = os.path.join(
+             #   app.config["REPORT_FOLDER"],
+              #  f"{os.path.splitext(file.filename)[0]}_report.pdf"
+           # )
 
-            generate_pdf(
-                report_path,
-                filepath,
-                gradcam_path,
-                result,
-                prob_dict,
-                get_recommendations(result, confidence),
-                chart_path
-            )
+           # generate_pdf(
+            #    report_path,
+             #   filepath,
+              #  gradcam_path,
+               # result,
+                #prob_dict,
+                #get_recommendations(result, confidence),
+                #chart_path
+            #)
 
             return render_template(
                 "result.html",
                 result=result,
                 confidence=round(confidence * 100, 2),
                 img_path=filepath,
-                gradcam_path=gradcam_path,
                 recommendations=get_recommendations(result, confidence),
-                report_path=report_path,
                 prob_dict=prob_dict
             )
 
